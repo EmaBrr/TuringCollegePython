@@ -103,14 +103,24 @@ def foaf_ids_bad(user):
     return [foaf_id
             for friend_id in friendships[user["id"]]
             for foaf_id in friendships[friend_id]]
-print(users[0])
-test_calling_function = foaf_ids_bad(users[0])
-print(test_calling_function)
+
 print(foaf_ids_bad(users[0]))
-print(friendships[0])  # [1, 2]
-print(friendships[1])  # [0, 2, 3]
-print(friendships[2])  # [0, 1, 3]
-from collections import Counter                   # not loaded by default
+
+# Result: [0, 2, 3, 0, 1, 3]
+
+print(friendships[0])  # Result: [1, 2]
+print(friendships[1])  # Result: [0, 2, 3]
+print(friendships[2])  # Result: [0, 1, 3]
+
+# Counter - In Python, Counter is a class that counts the occurrences of elements in an iterable and returns the results as a dictionary-like object.
+
+# Simple example: 
+from collections import Counter                   # not loaded by default --seems that this row should go everywhere next to Counter
+my_list = [1, 2, 2, 3, 3, 3, 4, 4, 4, 4]
+counts = Counter(my_list)
+print(counts)  # Output: Counter({4: 4, 3: 3, 2: 2, 1: 1})
+
+from collections import Counter                   # not loaded by default --seems that this row should go everywhere next to Counter
 def friends_of_friends(user):
     user_id = user["id"]
     return Counter(
@@ -122,6 +132,9 @@ def friends_of_friends(user):
     )
 
 print(friends_of_friends(users[3]))               # Counter({0: 2, 5: 1})
+
+# Another task. These are employees interest:
+
 interests = [
     (0, "Hadoop"), (0, "Big Data"), (0, "HBase"), (0, "Java"),
     (0, "Spark"), (0, "Storm"), (0, "Cassandra"),
@@ -138,11 +151,20 @@ interests = [
     (8, "Big Data"), (8, "artificial intelligence"), (9, "Hadoop"),
     (9, "Java"), (9, "MapReduce"), (9, "Big Data")
 ]
+
+
+# Defining the formula which will find employees who's interests will be added as input into the formula:
+
 def data_scientists_who_like(target_interest):
     """Find the ids of all users who like the target interest."""
     return [user_id
             for user_id, user_interest in interests
             if user_interest == target_interest]
+
+print(data_scientists_who_like('Java')) #Result: [0, 5, 9]
+
+# defaultdict - In Python, defaultdict is a dictionary subclass that automatically initializes new keys with a default value of your choice, 
+# making it useful for tasks where you want to ensure that all keys have an initial value.
 
 from collections import defaultdict
 # Keys are interests, values are lists of user_ids with that interest
@@ -150,10 +172,31 @@ user_ids_by_interest = defaultdict(list)
 for user_id, interest in interests:
     user_ids_by_interest[interest].append(user_id)
 
+print(user_ids_by_interest)
+
+# Result:
+# defaultdict(<class 'list'>, {'Hadoop': [0, 9], 'Big Data': [0, 8, 9], 'HBase': [0, 1], 'Java': [0, 5, 9], 'Spark': [0], 
+# 'Storm': [0], 'Cassandra': [0, 1], 'NoSQL': [1], 'MongoDB': [1], 'Postgres': [1], 'Python': [2, 3, 5], 
+# 'scikit-learn': [2, 7], 'scipy': [2], 'numpy': [2], 'statsmodels': [2], 'pandas': [2], 'R': [3, 5], 'statistics': [3, 6], 
+# 'regression': [3, 4], 'probability': [3, 6], 'machine learning': [4, 7], 'decision trees': [4], 'libsvm': [4], 'C++': [5], 
+# 'Haskell': [5], 'programming languages': [5], 'mathematics': [6], 'theory': [6], 'Mahout': [7], 'neural networks': [7, 8], 
+# 'deep learning': [8], 'artificial intelligence': [8], 'MapReduce': [9]})
+
 # Keys are user_ids, values are lists of interests for that user_id.
 interests_by_user_id = defaultdict(list)
 for user_id, interest in interests:
     interests_by_user_id[user_id].append(interest)
+
+print(interests_by_user_id)
+
+# Result:
+# defaultdict(<class 'list'>, {0: ['Hadoop', 'Big Data', 'HBase', 'Java', 'Spark', 'Storm', 'Cassandra'], 
+# 1: ['NoSQL', 'MongoDB', 'Cassandra', 'HBase', 'Postgres'], 2: ['Python', 'scikit-learn', 'scipy', 'numpy', 'statsmodels', 'pandas'], 
+# 3: ['R', 'Python', 'statistics', 'regression', 'probability'], 4: ['machine learning', 'regression', 'decision trees', 'libsvm'], 
+# 5: ['Python', 'R', 'Java', 'C++', 'Haskell', 'programming languages'], 6: ['statistics', 'probability', 'mathematics', 'theory'], 
+# 7: ['machine learning', 'scikit-learn', 'Mahout', 'neural networks'], 8: ['neural networks', 'deep learning', 'Big Data', 'artificial intelligence'], 
+# 9: ['Hadoop', 'Java', 'MapReduce', 'Big Data']})
+
 def most_common_interests_with(user):
     return Counter(
         interested_user_id
@@ -162,20 +205,39 @@ def most_common_interests_with(user):
         if interested_user_id != user["id"]
     )
 
+# Calculates which another user have same interest as input:
+
+print(most_common_interests_with(users[0]))
+
+# Result: Counter({9: 3, 1: 2, 8: 1, 5: 1})
+
+# Another task:
+
 salaries_and_tenures = [(83000, 8.7), (88000, 8.1),
                         (48000, 0.7), (76000, 6),
                         (69000, 6.5), (76000, 7.5),
                         (60000, 2.5), (83000, 10),
                         (48000, 1.9), (63000, 4.2)]
+
 # Keys are years, values are lists of the salaries for each tenure.
 salary_by_tenure = defaultdict(list)
 for salary, tenure in salaries_and_tenures:
     salary_by_tenure[tenure].append(salary)
+
+print(salary_by_tenure)
+
+#Result: defaultdict(<class 'list'>, {8.7: [83000], 8.1: [88000], 0.7: [48000], 6: [76000], 6.5: [69000], 7.5: [76000], 2.5: [60000], 10: [83000], 1.9: [48000], 4.2: [63000]})
+
 # Keys are years, each value is average salary for that tenure.
 average_salary_by_tenure = {
     tenure: sum(salaries) / len(salaries)
     for tenure, salaries in salary_by_tenure.items()
 }
+
+print(average_salary_by_tenure)
+
+# Result: {8.7: 83000.0, 8.1: 88000.0, 0.7: 48000.0, 6: 76000.0, 6.5: 69000.0, 7.5: 76000.0, 2.5: 60000.0, 10: 83000.0, 1.9: 48000.0, 4.2: 63000.0}
+
 def tenure_bucket(tenure):
     if tenure < 2:
         return "less than two"
@@ -189,11 +251,24 @@ salary_by_tenure_bucket = defaultdict(list)
 for salary, tenure in salaries_and_tenures:
     bucket = tenure_bucket(tenure)
     salary_by_tenure_bucket[bucket].append(salary)
+
+print(salary_by_tenure_bucket)
+
+# Result: defaultdict(<class 'list'>, {'more than five': [83000, 88000, 76000, 69000, 76000, 83000], 'less than two': [48000, 48000], 'between two and five': [60000, 63000]})
+
 # Keys are tenure buckets, values are average salary for that bucket.
 average_salary_by_bucket = {
   tenure_bucket: sum(salaries) / len(salaries)
   for tenure_bucket, salaries in salary_by_tenure_bucket.items()
 }
+
+# Explanation for .items() In Python, items() is a method that can be called on a dictionary object. It returns a view of the dictionary's key-value pairs as a sequence of tuples. 
+# Each tuple contains two elements: the key and the corresponding value.
+
+print(average_salary_by_bucket)
+
+# Result: {'more than five': 79166.66666666667, 'less than two': 48000.0, 'between two and five': 61500.0}
+
 interests = [
     (0, "Hadoop"), (0, "Big Data"), (0, "HBase"), (0, "Java"),
     (0, "Spark"), (0, "Storm"), (0, "Cassandra"),
@@ -210,6 +285,7 @@ interests = [
     (8, "Big Data"), (8, "artificial intelligence"), (9, "Hadoop"),
     (9, "Java"), (9, "MapReduce"), (9, "Big Data")
 ]
+
 words_and_counts = Counter(word
                            for user, interest in interests
                            for word in interest.lower().split())
@@ -217,30 +293,51 @@ for word, count in words_and_counts.most_common():
     if count > 1:
         print(word, count)
 
+# Result
+# big 3
+# data 3
+# java 3
+# python 3
+# learning 3
+# hadoop 2
+# hbase 2
+# cassandra 2
+# scikit-learn 2
+# r 2
+# statistics 2
+# regression 2
+# probability 2
+# machine 2
+# neural 2
+# networks 2
 
+print(words_and_counts)
 
+# Result: Counter({'big': 3, 'data': 3, 'java': 3, 'python': 3, 'learning': 3, 'hadoop': 2, 'hbase': 2, 'cassandra': 2, 
+# 'scikit-learn': 2, 'r': 2, 'statistics': 2, 'regression': 2, 'probability': 2, 'machine': 2, 'neural': 2, 'networks': 2, 
+# 'spark': 1, 'storm': 1, 'nosql': 1, 'mongodb': 1, 'postgres': 1, 'scipy': 1, 'numpy': 1, 'statsmodels': 1, 'pandas': 1, 
+# 'decision': 1, 'trees': 1, 'libsvm': 1, 'c++': 1, 'haskell': 1, 'programming': 1, 'languages': 1, 'mathematics': 1, '
+# 'theory': 1, 'mahout': 1, 'deep': 1, 'artificial': 1, 'intelligence': 1, 'mapreduce': 1})
 
-
-
-print('hello world')
+# Introduction 2:
 
 x=10
-print(f'The answer is {x}')
+print(f'The answer is {x}') # Result: The answer is 10
 
 # raise ValueError(f'Expected {x!r} to a float not a {type(x).__name__}')
 
 from collections import Counter
-d={}
-d=Counter()
-d
 print(Counter('red green blue red blue green green'.split()))
+
+# Result: Counter({'green': 3, 'red': 2, 'blue': 2})
 
 from statistics import mean, median, mode, stdev, pstdev
 
-# stdev dalina iš kiek yra skaičių, o pstdev dalina iš n-1
+# Explanation between stdev and pstdev: The key difference between stdev (standard deviation) and pstdev (population standard deviation) is in 
+# their application to data: stdev is used when working with a sample of data and corrects for bias by dividing by n-1 (Bessel's correction), 
+# while pstdev is used when you have data for the entire population and divides by n without applying the correction, as it assumes no sampling error.
 
 print(mean([50, 52, 53]))
-
 print(stdev([50, 52, 53]))
 print(pstdev([50, 52, 53]))
 
@@ -248,15 +345,20 @@ s = [10, 20, 30]
 
 t= [40, 50, 60]
 
-print(s+t)
+print(s + t)
 
 s=[10, 5, 70, 2]
 print(s.sort())
 
-# Lambda --> partial objects itemgetter, arttrgetter
-
 print(100 + (lambda x:x**2)(5) +50)
+
+# Explanation: lambda x: x**2 defines an anonymous function, also known as a lambda function. This function takes one argument x and returns the square of x.
+# (5) immediately calls (invokes) the lambda function with the argument 5. So, (lambda x: x**2)(5) calculates and returns the square of 5, which is 25.
+# The expression 100 + 25 + 50 is evaluated, resulting in 175.
+
+# PROD for using lambda:
+# Conciseness: Lambda functions are very concise and can be defined in a single line of code. This can make your code more readable when the function is simple and short.
 
 x=15
 print(x>6)
-print(x<10) #chained comparissons
+print(x<10) # It is called Chained Comparissons
