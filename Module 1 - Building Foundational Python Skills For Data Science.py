@@ -319,7 +319,8 @@ print(words_and_counts)
 # 'decision': 1, 'trees': 1, 'libsvm': 1, 'c++': 1, 'haskell': 1, 'programming': 1, 'languages': 1, 'mathematics': 1, '
 # 'theory': 1, 'mahout': 1, 'deep': 1, 'artificial': 1, 'intelligence': 1, 'mapreduce': 1})
 
-# Introduction 2:
+# https://learning.oreilly.com/videos/modern-python-livelessons/9780134743400/9780134743400-MOPY_01_00_00/
+# Lesson 1: Building Foundational Python Skills for Data Analytics (C4, 1)
 
 x=10
 print(f'The answer is {x}') # Result: The answer is 10
@@ -362,3 +363,179 @@ print(100 + (lambda x:x**2)(5) +50)
 x=15
 print(x>6)
 print(x<10) # It is called Chained Comparissons
+
+# Part 2: 
+
+from random import *
+print(random ()) # 0.23926123941024857
+seed (8675309)
+print(random ()) # 0.40224696110279223
+seed (8675309)
+print(random ()) # 0.40224696110279223
+
+print(uniform(1000,1100)) # Result: 1051.0247177921592
+
+print(triangular(1000, 1100)) #Result: 1058.9965313824887
+
+print(gauss(1000, 1100))  # Result: 1572.563936827863
+
+print(expovariate(20)) # Result: 0.05127656633162116
+
+from statistics import mean, stdev
+
+data = [triangular(1000, 1100) for i in range(1000)]
+
+print(data)
+
+print(mean(data)) # Result: 1048.697761431962
+
+print(stdev(data)) # Result 20.11982549227617
+
+data = [uniform(1000, 1100) for i in range(1000)]
+
+print(data)
+
+print(mean(data)) # Result: 1051.1525573532265
+
+print(stdev(data)) # Result 28.52923129352503
+
+data = [expovariate(20) for i in range(1000)]
+
+print(data)
+
+print(mean(data)) # Result: 0.05135273750430566
+
+print(stdev(data)) # Result 0.05257849010975472
+
+from random import choice, choices, sample, shuffle
+
+outcomes = ['win', 'lose', 'draw', 'play again', 'double win']
+
+print(choice(outcomes)) #double win
+
+print(choices(outcomes, k=10)) #['play again', 'lose', 'win', 'play again', 'play again', 'double win', 'draw', 'win', 'double win', 'double win']
+
+print(Counter(choices(outcomes, [5, 4, 3, 2, 1], k=1000)))
+
+#Result: Counter({'win': 339, 'lose': 250, 'draw': 205, 'play again': 132, 'double win': 74})
+
+print(shuffle(outcomes)) #ordering
+
+print(outcomes) #['lose', 'play again', 'win', 'double win', 'draw']
+
+
+print(choices(outcomes, k=5)) #['double win', 'double win', 'double win', 'double win', 'win']
+
+#without duplicates:
+print(sample(outcomes, k=5)) #['draw', 'play again', 'double win', 'win', 'lose']
+
+print(sample(range(1, 57), k=6)) #[39, 22, 45, 42, 8, 54]
+
+print(sorted(sample(range(1, 57), k=6))) #[19, 23, 29, 40, 42, 46]
+
+# Lesson 2: Analyzing Data Using Simulations and Resampling (C2, 1)
+
+# Six roulette spins:
+
+from random import *
+from statistics import *
+from collections import *
+
+# Six roulette wheels 18 black, 18 red, 2 green
+
+choice(['red', 'red', 'red', 'black', 'black', 'black', 'green']) #too much to write
+
+population = ["red"]*18 + ["green"]*2 + ["white"]*18
+
+print(choice(population)) #white
+
+print([choice(population) for i in range(6)]) #['white', 'green', 'white', 'red', 'white', 'red']
+
+print(Counter([choice(population) for i in range(6)])) #Counter({'white': 3, 'red': 3})
+
+print(choices(population, k=6)) #['red', 'red', 'white', 'red', 'white', 'red']
+
+print(Counter(choices(["red", "green", "white"], [18, 2, 18], k=6))) #Counter({'red': 3, 'white': 2, 'green': 1})
+
+deck = Counter(tens = 16, low = 36)
+
+print(list(deck.elements()))
+
+# ['tens', 'tens', 'tens', 'tens', 'tens', 'tens', 'tens', 'tens', 'tens', 'tens', 'tens', 'tens', 'tens', 'tens', 'tens', 'tens', 'low', 'low', 'low', 'low', 'low', 'low', 'low', 'low', 'low', 'low', 'low', 'low', 'low', 'low', 'low', 'low', 'low', 'low', 'low', 'low', 'low', 'low', 'low', 'low', 'low', 'low', 'low', 'low', 'low', 'low', 'low', 'low', 'low', 'low', 'low', 'low']
+
+print(deck)
+
+deck = Counter(tens=16, low=36)
+deck = list(deck.elements())
+deal = sample(deck, 52)
+remainder = deal[20:]
+
+print(Counter(deck)) #Counter({'low': 36, 'tens': 16})
+print(Counter(deal)) #Counter({'low': 36, 'tens': 16})
+print(Counter(remainder)) #Counter({'low': 23, 'tens': 9})
+
+#Coin spin:
+
+population_coins = ['heads', 'tails']
+wgt = [6,4]
+cumwgt= [0.60, 1.00]
+
+print(choices(['heads', 'tails'], [0.60, 1.00], k=7))
+
+#['tails', 'tails', 'tails', 'tails', 'heads', 'tails', 'tails']
+
+print(choices(['heads', 'tails'], [0.60, 1.00], k=7).count('heads')) #3
+
+trial = lambda: choices(['heads', 'tails'], [0.60, 1.00], k=7).count('heads') >= 5 #3
+
+print(trial()) #false
+
+n= 100000
+
+print(sum(trial() for i in range(n))/n) #0.074
+
+from math import factorial as fact
+
+print(fact(4)) #24
+
+def comb(n, r):
+    return fact(n)/fact(r)/fact(n-r)
+
+print(comb(10, 3)) #120
+
+#binomial theorem:
+
+ph = 0.6
+
+#what are the chances to get 5 heads of 7 spins:
+
+print(ph **5 * (1 - ph) **2 * comb(7, 5)) #0.2612736
+
+print(ph **6 * (1 - ph) **1 * comb(7, 6)) #0.13063679999999997
+
+print(ph **7 * (1 - ph) **0 * comb(7, 7)) #0.027993599999999993
+
+#Mathematical approach also works fine, but if there were 70k spins and we needed heads for 42k times, then it would become super large
+
+# Does the median of five fall in the middle of two quartiles?
+
+print(sample(range(100000), 5)) #[1164, 5190, 66777, 22460, 3212]
+
+print(median(sample(range(100000), 5))) #53279
+
+print(sorted(sample(range(100000), 5))) #[7448, 27534, 35875, 55682, 93385]
+
+print(sorted(sample(range(100000), 5))[2]) #52283
+
+n = 100000
+
+print(n)
+print(n//4) #25000
+print(n*3//4) #75000
+print(n//4 < median(sample(range(100000), 5)) <= 3*n//4) #False
+
+# 25000 < 53279 <= 75000.0
+
+trial = lambda : n//4 < median(sample(range(100000), 5)) <= 3*n//4
+
+print(sum(trial() for i in range(n)) / n) #0.79171
