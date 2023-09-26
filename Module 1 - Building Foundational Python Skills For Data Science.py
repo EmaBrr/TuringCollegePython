@@ -539,3 +539,129 @@ print(n//4 < median(sample(range(100000), 5)) <= 3*n//4) #False
 trial = lambda : n//4 < median(sample(range(100000), 5)) <= 3*n//4
 
 print(sum(trial() for i in range(n)) / n) #0.79171
+
+# PART2
+
+# Bootstrapping is used when obtaining new samples is expensive like studies with drugs for pregnant woman.
+
+timing = [7.18, 8.59, 12.24, 7.39, 8.16, 8.68, 6.98, 8.31, 9.06, 7.06, 7.67, 10.02, 6.87, 9.07]
+
+from statistics import mean, stdev
+
+print(mean(timing)) # 8.377142857142857
+
+print(stdev(timing)) # 1.4576505256559458
+
+# Building a 90% confidence interval
+
+# A 90% confidence interval in statistics is a range of values calculated from a sample of data, 
+# such that we can be 90% confident that the true population parameter (e.g., mean or proportion)
+# falls within that interval. This means that if we were to take many random samples and calculate 
+# 90% confidence intervals for each, we would expect approximately 90% of these intervals to contain the true population parameter.
+
+def bootstrap(data):
+    return choices(data, k=len(data))
+
+from random import choices
+
+print(bootstrap(timing))
+
+# Bootstrap is a resampling technique in statistics that involves drawing repeated random samples with replacement 
+# from an original dataset to estimate the sampling distribution and infer properties of a population.
+
+print(mean(bootstrap(timing)))
+
+# We would like to compute many means like 10000 times
+
+n= 10000
+means = sorted(mean(bootstrap(timing)) for i in range(n))
+
+print(means)
+
+print(len(means)) #10000
+
+print(means[:20]) #first 20
+
+print(means[-20:]) #last 20
+
+print(mean(means)) #8.375379785714285
+
+k=10000
+
+means = sorted(mean(bootstrap(timing)) for i in range(k))
+
+print(means[500]) #7.797142857142857
+print(means[-500]) #7.797142857142857
+
+print(f'Falls in a 90% confidence interval from {means[500]:.1f} to {means[-500]:.1f}')
+
+# Falls in a 90% confidence interval from 7.8 to 9.0
+
+# Statictical significance and p-values:
+
+drug = [7.1, 8.5, 6.4, 7.7, 8.2, 7.6, 8.4, 5.1, 8.1, 7.4, 6.9, 8.4]
+placebo = [8.2, 6.1, 7.1, 4.9, 7.4, 8.1, 7.1, 6.2, 7.0, 6.6, 6.3]
+
+from statistics import mean, stdev
+print(mean(drug)) #7.483333333333333
+print(mean(placebo)) #6.818181818181818
+
+obs_diff = mean(drug) - mean(placebo)
+print(obs_diff) #0.665151515151515
+
+#hypotesis 0: no effect of the drugs
+
+comb= drug + placebo
+nd = len(drug)
+shuffle(comb)
+print(nd) #12
+print(comb) #12
+print(comb[:nd])
+print(comb[-nd:])
+
+#if we reshuffle permutting, relabelling the participants
+# is the new mean diff the same of more extreme than observed?
+
+def trial():
+    shuffle(comb)
+    drug = comb [:nd]
+    placebo = comb[nd:]
+    new_diff = mean(drug) - mean(placebo)
+    return new_diff >= obs_diff
+
+n= 10000
+print(sum(trial() for i in range(n))/n) #0.0654
+
+#p-value likelihood that the outcome was solely due to chance
+
+print(sum(trial() for i in range(n))/n) #0.0626
+
+#TOPIC: SINGLE SERVER QUEUE SIMULATION
+
+from random import expovariate, gauss
+
+from statistics import mean, stdev, median
+
+average_arrival_interval = 5.6
+average_service_time = 4.8
+stdev_service_time = 0.5 # if I put zero, ten service would be more consistent, which improves the result of simulation
+
+num_waiting = 0
+arrivals = []
+starts = []
+arrival = service_end = 0.0
+for i in range(20000):
+    if arrival <= service_end:
+        num_waiting += 1
+        arrival += expovariate(1.0 / average_arrival_interval) #this says when next person will come, avg will be 5.6
+        arrivals.append(arrival)
+    else:
+        num_waiting += 1
+        service_start = service_end if num_waiting else arrival
+        service_time = gauss(average_service_time, stdev_service_time) #normal distribution, avg about 5 sec
+        service_end = service_start + service_time
+        starts.append(service_start)
+
+waits = [start - arrival for arrival, start in zip(arrivals, starts)]
+print(f'Mean wait: {mean(waits):.1f}. Stdev wait: {stdev(waits):.1f}')
+print(f'Median wait: {median(waits):.1f}. Max wait: {max(waits):.1f}')
