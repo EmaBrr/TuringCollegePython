@@ -240,3 +240,159 @@ for row in m:
 # 50
 # 60  
 
+# LESSON 4
+from pprint import pprint
+
+points = [
+    (10,41,23),
+    (22,30,29),
+    (11,42,5),
+    (20,32,4),
+    (12,40,12),
+    (21,36,23),
+]
+
+pprint(points)
+
+# print(mean(point))
+
+def f(data):
+    return sum(data) / len(data)
+
+g = f([12,13,13])
+# mean(1,2,3)
+
+print(g)
+
+from math import fsum, hypot, sqrt
+from typing import Iterable, Tuple
+
+def f(data: Iterable[float]) -> float:
+    #accurate arithmetic mean
+    data = list(data)
+    return fsum(data) / len(data)
+
+g = f([12,13,13])
+# mean(1,2,3)
+
+print(g)
+
+print(hypot(3,4)) #5.0
+
+p= (10,41,23)
+q= (22,30,20)
+list(zip(p,q))
+
+def dist(p, q):
+    return [x - y for x, y in zip(p, q)]
+
+def dist(p, q):
+    #euclidean distance function for multidimentional data
+    return sqrt(fsum([(x - y) ** 2 for x, y in zip(p, q)]))
+
+from dis import * #what does it do??
+
+def dist(p, q, fsum=fsum, sqrt=sqrt, zip=zip):
+    #euclidean distance function for multidimentional data
+    return sqrt(fsum([(x - y) ** 2 for x, y in zip(p, q)]))
+
+print(dis(dist))
+
+def dist(p, q, fsum=fsum, sqrt=sqrt, zip=zip):
+    #euclidean distance function for multidimentional data
+    return sqrt(fsum([(x - y) ** 2 for x, y in zip(p, q)]))
+
+print(dis(dist))
+
+
+
+
+
+for point in points:
+    print(point, dist(point, (9,39,20)))
+
+
+
+# The task: let's say we have 3D and there are two suns that will be called centroids, and there are planets and we want to know to which sun it's connected (which is the closest)
+from collections import defaultdict
+from math import fsum, hypot, sqrt    
+from typing import Iterable, Tuple
+
+Point = Tuple[int, ...]
+
+def dist(p: Point, q: Point) -> float:
+    # Euclidean distance function for multidimensional data
+    return sqrt(sum((x - y) ** 2 for x, y in zip(p, q)))
+
+centroids = [(9, 39, 20), (12, 36, 25)]
+point = (11, 42, 5)
+
+# Calculate distances for each centroid individually
+distances = [dist(point, centroid) for centroid in centroids]
+print(distances)
+
+#[15.427248620541512, 20.904544960366874]
+
+print(min(centroids, key= lambda centroid: dist(point, centroid))) #(9, 39, 20)
+
+from functools import partial
+
+print(pow(2,5))
+
+twopow = partial(pow, 2)
+twopow(5)
+
+min(centroids, key= partial(dist, point))
+
+def assign_data(centroids, data):
+    d = defaultdict(list)
+    for point in data:
+        closest_centroid = min(centroids, key=partial(dist, point))
+        d[closest_centroid].append(point)
+    return d
+
+pprint(assign_data(centroids, points), width=45)
+
+# Result:
+# defaultdict(<class 'list'>,
+#             {(9, 39, 20): [(10, 41, 23),
+#                            (11, 42, 5),
+#                            (20, 32, 4),
+#                            (12, 40, 12)],
+#              (12, 36, 25): [(22, 30, 29),
+#                             (21, 36, 23)]})
+
+groups = [
+    [(10, 41, 23),
+    (11, 42, 5),
+    (20, 32, 4),
+    (12, 40, 12)],
+    [(22, 30, 29),
+     (21, 36, 23)]
+]
+
+pprint(groups)
+
+# Result:
+# [[(10, 41, 23), (11, 42, 5), (20, 32, 4), (12, 40, 12)],
+#  [(22, 30, 29), (21, 36, 23)]]
+
+group = [(10, 41, 23), (11, 42, 5), (20, 32, 4), (12, 40, 12)]
+
+# We want to calculate the average, so we need to move together all those cordinates:
+
+pprint(list(zip(*group)))
+
+from statistics import mean
+# Result:
+# [(10, 11, 20, 12), (41, 42, 32, 40), (23, 5, 4, 12)]
+# [(x, x, x, x), (y, y, y, y), (z, z, z, z)]
+
+pprint(list(map(mean, zip(*group))))
+
+#  Result: [13.25, 38.75, 11]
+
+pprint([tuple(map(mean, zip(*group))) for group in groups])
+
+#LESSON 4 PART 2
+
