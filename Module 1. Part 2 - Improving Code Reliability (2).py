@@ -396,3 +396,10 @@ pprint([tuple(map(mean, zip(*group))) for group in groups])
 
 #LESSON 4 PART 2
 
+# Sequence: A sequence is a general term for an ordered collection of elements. It can refer to both lists and tuples. Sequences are iterable and indexable, meaning you can access their elements by position. Lists and tuples are examples of sequences, but lists are mutable (modifiable), while tuples are immutable (unchangeable).
+
+# List: A list is a mutable and ordered collection of elements enclosed in square brackets []. Lists allow you to add, remove, or modify elements after creation. They are commonly used for dynamic collections of items where the order and content may change during the program's execution.
+
+# Dictionary (dict): A dictionary is an unordered collection of key-value pairs enclosed in curly braces {}. Each key in a dictionary maps to a corresponding value, and you can use the key to access the associated value. Dictionaries are useful for storing and retrieving data based on unique keys and are often used for implementing associative arrays or mappings.
+
+# zip(*group) can be changed to transposed
