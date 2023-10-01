@@ -1,4 +1,4 @@
-# Improving Reliability with MyPy and Type Hinting
+# Lesson 3: Improving Reliability with MyPy and Type Hinting (C4, 1)
 
 # KEY THINGS TO REMEMBER:
 # fsum is more accurate than sum
@@ -6,8 +6,6 @@
 # key functions work eith min max sorted nsmallest nlargest groupby and merge
 # z star is used for transpose 2d data zip(*data)
 # convert an iterator into a list with list(it)
-# 
-
 
 from typing import *
 from collections import OrderedDict, deque, namedtuple
@@ -81,7 +79,6 @@ fifo= deque() #type: deque
 
 # Point = namedtuple('Point', [('x', int), ('y', int)])
 
-
 # A tuple is a data structure in programming that is used to store an ordered collection of elements. Tuples are similar to lists in many ways, but they have one key difference: tuples are immutable, which means their elements cannot be changed after they are defined.
 
 print(1.1 + 2.2) #3.3000000000000003
@@ -138,7 +135,7 @@ a['t'].append('tim')
 a['t'].append('tom')
 a['m'].append('martin')
 
-print(a) #defaultdict(<class 'list'>, {'t': ['tom', 'tim', 'tom'], 'm': ['marry', 'martin']})
+print(a) # defaultdict(<class 'list'>, {'t': ['tom', 'tim', 'tom'], 'm': ['marry', 'martin']})
 
 names = ''' david betty susan mary darlee dandy davin shelly becky beatrice tom michael wallace'''.split()
 
@@ -179,8 +176,7 @@ pprint(d)
 #              7: ['michael', 'wallace'],
 #              8: ['beatrice']})
 
-
-#same as in SQL: SELECT NAME FROM NAMED ORDER BY LEN(NAME)
+# Same as in SQL: SELECT NAME FROM NAMED ORDER BY LEN(NAME)
 
 pprint(sorted(names, key=len))
 
@@ -240,7 +236,8 @@ for row in m:
 # 50
 # 60  
 
-# LESSON 4
+# Lesson 4: Implementing k-means Unsupervised Machine Learning (C2, 1.5)
+
 from pprint import pprint
 
 points = [
@@ -268,7 +265,7 @@ from math import fsum, hypot, sqrt
 from typing import Iterable, Tuple
 
 def f(data: Iterable[float]) -> float:
-    #accurate arithmetic mean
+    # Accurate arithmetic mean
     data = list(data)
     return fsum(data) / len(data)
 
@@ -287,31 +284,25 @@ def dist(p, q):
     return [x - y for x, y in zip(p, q)]
 
 def dist(p, q):
-    #euclidean distance function for multidimentional data
+    # Euclidean distance function for multidimentional data
     return sqrt(fsum([(x - y) ** 2 for x, y in zip(p, q)]))
 
 from dis import * #what does it do??
 
 def dist(p, q, fsum=fsum, sqrt=sqrt, zip=zip):
-    #euclidean distance function for multidimentional data
+    # Euclidean distance function for multidimentional data
     return sqrt(fsum([(x - y) ** 2 for x, y in zip(p, q)]))
 
 print(dis(dist))
 
 def dist(p, q, fsum=fsum, sqrt=sqrt, zip=zip):
-    #euclidean distance function for multidimentional data
+    # Euclidean distance function for multidimentional data
     return sqrt(fsum([(x - y) ** 2 for x, y in zip(p, q)]))
 
 print(dis(dist))
 
-
-
-
-
 for point in points:
     print(point, dist(point, (9,39,20)))
-
-
 
 # The task: let's say we have 3D and there are two suns that will be called centroids, and there are planets and we want to know to which sun it's connected (which is the closest)
 from collections import defaultdict
@@ -331,7 +322,7 @@ point = (11, 42, 5)
 distances = [dist(point, centroid) for centroid in centroids]
 print(distances)
 
-#[15.427248620541512, 20.904544960366874]
+# [15.427248620541512, 20.904544960366874]
 
 print(min(centroids, key= lambda centroid: dist(point, centroid))) #(9, 39, 20)
 
@@ -394,23 +385,27 @@ pprint(list(map(mean, zip(*group))))
 
 pprint([tuple(map(mean, zip(*group))) for group in groups])
 
-#LESSON 4 PART 2
+# PART 2
 
-# Sequence: A sequence is a general term for an ordered collection of elements. It can refer to both lists and tuples. Sequences are iterable and indexable, meaning you can access their elements by position. Lists and tuples are examples of sequences, but lists are mutable (modifiable), while tuples are immutable (unchangeable).
-
-# List: A list is a mutable and ordered collection of elements enclosed in square brackets []. Lists allow you to add, remove, or modify elements after creation. They are commonly used for dynamic collections of items where the order and content may change during the program's execution.
-
-# Dictionary (dict): A dictionary is an unordered collection of key-value pairs enclosed in curly braces {}. Each key in a dictionary maps to a corresponding value, and you can use the key to access the associated value. Dictionaries are useful for storing and retrieving data based on unique keys and are often used for implementing associative arrays or mappings.
+# Sequence: A sequence is a general term for an ordered collection of elements. It can refer to both lists and tuples. 
+# Sequences are iterable and indexable, meaning you can access their elements by position. Lists and tuples are examples of sequences, 
+# but lists are mutable (modifiable), while tuples are immutable (unchangeable).
+# List: A list is a mutable and ordered collection of elements enclosed in square brackets []. 
+# Lists allow you to add, remove, or modify elements after creation. They are commonly used for dynamic collections of items where the 
+# order and content may change during the program's execution.
+# Dictionary (dict): A dictionary is an unordered collection of key-value pairs enclosed in curly braces {}. 
+# Each key in a dictionary maps to a corresponding value, and you can use the key to access the associated value. 
+# Dictionaries are useful for storing and retrieving data based on unique keys and are often used for implementing associative arrays or mappings.
 
 # zip(*group) can be changed to transposed
 
-# LESSON 5
+# Lesson 5: Building Additional Skills for Data Analysis (C4, 1)
 
 # defaultdict -- TOPIC
 
 from collections import defaultdict #collections is a module
 
-# explanation of defaultdict:
+# Explanation of defaultdict:
 # When you create a defaultdict, you specify a default factory function as an argument. This function determines the default value for any new keys added to the dictionary.
 # When you access a key that doesn't exist in the defaultdict, it automatically creates that key and assigns it a default value generated by the factory function.
 
@@ -457,7 +452,6 @@ for eng, spanwords in e2s.items():
 
 pprint(dict(s2e), width=40)  # Convert defaultdict to a regular dictionary for prettier printing
 
-
 # One to one called bijetion by mathematicians
 
 e2s = dict(one='uno', two = 'dos', three = 'tres')
@@ -466,9 +460,9 @@ span_to_eng = {span: eng for eng, span in e2s.items()}
 
 print(span_to_eng) 
 
-# result: {'uno': 'one', 'dos': 'two', 'tres': 'three'}
+# Result: {'uno': 'one', 'dos': 'two', 'tres': 'three'}
 
-# LESSON 5 PART 2
+# PART 2
 
 import glob
 print(glob.glob('*.txt')) #Result: []
