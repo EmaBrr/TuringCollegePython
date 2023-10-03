@@ -13,7 +13,7 @@ def pig_latin():
         else:
             letters = []
             for letter in en_word[1:]: # Spliting the word into letters without first letter
-                letters.append(letter)
+                letters.append(letter) 
             
             new_end = 'ay'
             en_word_without_start = ''.join(letters)
