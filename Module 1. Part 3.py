@@ -240,11 +240,56 @@ f(10, 'some value') # 10 some value
 
 # Lesson 8: Implementing a Publisher/Subscriber Application (C2, 1.5)
 
-from collections import namedtuple
+from collections import namedtuple, deque, defaultdict
+import time
+from typing import NamedTuple, DefaultDict, Optional
+from pprint import pprint
 
-Post = namedtuple('Post', ['timestamp', 'user', ''])
+Post = namedtuple('Post', ['timestamp', 'user', 'text'])
 
+posts = deque() # Posts from newest to oldest #Type: deque
+user_posts = defaultdict(deque) #type: DefaultDict[str, deque]
+Timestamp = float # mypy not happy with Optional(float)
+def post_message(user: str, text: str, timestamp: Timestamp = None) -> None:
+    timestamp = timestamp or time.time()
+    post = Post(timestamp, user, text)
+    posts.appendleft(post)
+    user_posts[user].appendleft(post)
 
+# In large programs, emory use is dominated by data not by containers
 
+# from pubsub import * --doesnt work
 
+post_message('guido', 'I love python')
 
+if __name__ == '__main__':
+    pprint(posts)
+    pprint(user_posts['guido']) #if we want to print only one user's posts
+# Result: deque([Post(timestamp=1696579753.6497033, user='guido', text='I love python')])  
+
+# pyflakes 
+# mypy
+
+Post = NamedTuple('Post', [('timestamp', str), ('user', str), ('text', str)])
+
+following = defaultdict(set) # type: Dict[User, Set[User]]
+followers = defaultdict(set) # type: Dict[User], Set[User]
+
+User = str
+
+def follow(user: User, followed_user: User) -> None:
+    following[user].add(followed_user)
+    followers[followed_user].add(user)
+
+follow('davin', followed_user='raymondh')
+follow('davin', followed_user='barry')
+
+# pprint()
+
+print(len(user_posts['guido']))
+
+from itertools import islice
+
+print(list(islice(user_posts['guido'], None)))
+
+def posts_by_user(user: User, limit: Optional(int)=None) -> :
