@@ -274,8 +274,8 @@ if __name__ == '__main__':
 
 Post = NamedTuple('Post', [('timestamp', str), ('user', str), ('text', str)])
 
-following = defaultdict(set) # type: Dict[User, Set[User]]
-followers = defaultdict(set) # type: Dict[User], Set[User]
+following = defaultdict(set) # Type: Dict[User, Set[User]]
+followers = defaultdict(set) # Type: Dict[User], Set[User]
 
 User = str
 
