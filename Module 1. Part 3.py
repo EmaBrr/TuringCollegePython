@@ -242,8 +242,10 @@ f(10, 'some value') # 10 some value
 
 from collections import namedtuple, deque, defaultdict
 import time
-from typing import NamedTuple, DefaultDict, Optional
+from typing import NamedTuple, DefaultDict, Optional, List
 from pprint import pprint
+from itertools import islice
+from heapq import merge
 
 Post = namedtuple('Post', ['timestamp', 'user', 'text'])
 
@@ -282,7 +284,7 @@ def follow(user: User, followed_user: User) -> None:
     followers[followed_user].add(user)
 
 follow('davin', followed_user='raymondh')
-follow('davin', followed_user='barry')
+follow('davin', followed_user='guido')
 
 # pprint()
 
@@ -292,4 +294,73 @@ from itertools import islice
 
 print(list(islice(user_posts['guido'], None)))
 
-def posts_by_user(user: User, limit: Optional(int)=None) -> :
+def posts_by_user(user: User, limit: Optional[int]=None) -> List[Post]:
+    return list(islice(user_posts[user], limit))
+
+
+if __name__ == '__main__':
+    pprint(posts_by_user('guido', limit=1))
+
+user = 'davin'
+print(following[user]) # {'raymondh', 'barry'}
+
+for fu in following[user]:
+    print(user_posts[fu])
+
+def posts_by_user(user: User, limit: Optional[int]=None) -> List[Post]:
+    return list(merge(*[user_posts[fu] for fu in following[user]]))
+
+#  It shows newest posts in the beginning
+
+print(list(merge([1,4,9], [2,6,10]))) # [1, 2, 4, 6, 9, 10] asc
+print(list(merge([9,4,1], [10,6,1]))) # [9, 4, 1, 10, 6, 1] non sense
+print(list(merge([9,4,1], [10,6,1], reverse = True))) # [10, 9, 6, 4, 1, 1]
+
+for followed_user in following[user]:
+    print(user_posts[followed_user])
+
+def posts_for_user(user: User, limit: Optional[int]=None) -> List[Post]:
+    relevant = merge(*[user_posts[followed_user] 
+                       for followed_user in following[user]], reverse = True)
+    return list(islice(relevant, limit))
+
+# Interning eliminates redundant strings to save memory
+
+from sys import intern
+
+Post = NamedTuple('Post', [('timestamp', str), ('user', str), ('text', str)])
+
+def post_message(user: str, text: str, timestamp: Timestamp = None) -> None:
+    user = intern(user)
+    timestamp = timestamp or time.time()
+    post = Post(timestamp, user, text)
+    posts.appendleft(post)
+    user_posts[user].appendleft(post)
+
+
+def follow(user: User, followed_user: User) -> None:
+    user, followed_user = intern(user), intern(followed_user)
+    following[user].add(followed_user)
+    followers[followed_user].add(user)    
+
+def posts_by_user(user: User, limit: Optional[int]=None) -> List[Post]:
+    return list(merge(*[user_posts[fu] for fu in following[user]]))    
+
+def posts_for_user(user: User, limit: Optional[int]=None) -> List[Post]:
+    relevant = merge(*[user_posts[followed_user] 
+                       for followed_user in following[user]], reverse = True)
+    return list(islice(relevant, limit))
+
+for post in posts:
+    if 'python' in post.text:
+        print(post) # Post(timestamp=1696699514.5952072, user='guido', text='I love python')
+
+
+def search(phrase: str, limit: Optional[int]= None) -> list[Post]:
+    # Todo: add pre-indexing to speed-up searches
+    # Todo: Add time sensitive catching
+    filtered_posts = [post for post in posts if hasattr(post, 'text') and phrase in post.text]
+    return filtered_posts        
+
+if __name__ == '__main__':
+    pprint(search('python'))
