@@ -13,14 +13,14 @@ def quadratic(a: float, b: float, c: float) -> Tuple[float, float]:
             a*x**2 + b*x + c == 0
         For example:
             >>> x1, x2 = quadratic(a = 8, b = 22, c = 15)
-            >>> x1
-            -1.25
-            >>> x2
-            -1.5
+            >>> float(x1)
+            (-1.25+0j)
+            >>> float(x2)
+            (-1.5+0j)
             >>> 8*x1**2 + 22*x1 +15
-            0.00
+            0j
             >>> 8*x2**2 + 22*x2 + 15
-            0.00
+            0j
 
     '''
     discriminant = math.sqrt(b**2.0 - 4.0*a*c) # 4.0 is faster than 4 in floating point calculation
