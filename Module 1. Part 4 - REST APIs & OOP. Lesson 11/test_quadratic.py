@@ -1,4 +1,4 @@
-# import py.test # Doesn't work
+import pytest # Doesn't work
 from quadratic import quadratic
 import itertools 
 from itertools import *

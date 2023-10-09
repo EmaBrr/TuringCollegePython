@@ -4,7 +4,7 @@
 
 from typing import NamedTuple, DefaultDict
 import csv
-# from kmeans import k_means, assign_data
+from K_means import k_means, assign_data
 from collections import defaultdict # namedtuple - removed when added above with capital letters, defaultdict for data accumulation
 from pprint import pprint
 import glob
