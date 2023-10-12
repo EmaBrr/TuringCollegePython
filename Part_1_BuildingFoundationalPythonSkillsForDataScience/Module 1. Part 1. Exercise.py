@@ -1,27 +1,27 @@
 # https://www.hackerrank.com/dashboard
 
-# python_students = [['Prashant', 32], ['Pallavi', 36], ['Dheeraj', 39], ['Shivam', 40]]
+python_students = [['Prashant', 32], ['Pallavi', 36], ['Dheeraj', 39], ['Shivam', 40]]
 
-# belekas = []
+belekas = []
 
-# if __name__ == '__main__':
-#     for _ in range(int(input())):
-#         name = input()
-#         score = float(input());
-#         belekas.append([name,score])
+if __name__ == '__main__':
+    for _ in range(int(input())):
+        name = input()
+        score = float(input());
+        belekas.append([name,score])
 
         
-# from collections import Counter 
+from collections import Counter 
 
-# second_elements = sorted(Counter([list[1] for list in belekas]))
+second_elements = sorted(Counter([list[1] for list in belekas]))
 
-# items_with_second_biggest_value = []
-# for record in belekas:
-#     if record[1] == second_elements[1]:
-#         items_with_second_biggest_value.append(record[0])
+items_with_second_biggest_value = []
+for record in belekas:
+    if record[1] == second_elements[1]:
+        items_with_second_biggest_value.append(record[0])
 
-# for item in sorted(items_with_second_biggest_value):
-#     print(item)
+for item in sorted(items_with_second_biggest_value):
+    print(item)
 
 
 # Number guessing game
